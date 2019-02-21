@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#curl -s http://192.168.1.240:1317/blocks/latest |jq -r '.block_meta.header|"block:" + .height'
+
+#curl -s http://192.168.1.240:1317/stake/validators |jq -r '.[]|.tokens + " " + .description.moniker + "\t" + .operator_address'|sort -rn|head -30|sed 's/.0000000000//g'
+
+gaiacli query block | jq -r '.block_meta.header|"block:" + .height'
+
+gaiacli query staking validators --output json | jq -r '.[]|.tokens + " " + .description.moniker + "\t" + .operator_address'|sort -rn|head -20|sed 's/.0000000000//g'

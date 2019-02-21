@@ -1,0 +1,45 @@
+#!/bin/bash
+
+Window=500
+
+MaxHeight=`gaiacli status | jq .sync_info.latest_block_height | bc`
+# echo "MaxHeight: "$MaxHeight
+
+tmpfile=$(mktemp /tmp/abc-script.XXXXXX)
+
+echo $tmpfile
+
+for ((i=1; i<=$Window; i ++))
+do
+    # echo $i
+    HEIGHT=`expr $MaxHeight - $i`
+    echo -n $HEIGHT":" >> $tmpfile
+    curl http://localhost:26657/block?height=$HEIGHT 2>/dev/null | jq .result.block.header.proposer_address >> $tmpfile
+done
+
+echo "compass"
+cat $tmpfile | grep "8B2C484FF34411217CA90653" |wc -l
+echo "bharvest"
+cat $tmpfile | grep "B8552EAC0D123A6BF60" |wc -l
+echo "Certus One"
+cat $tmpfile | grep "815D8F7A0688622937758EF" |wc -l
+echo "ATEAM"
+cat $tmpfile | grep "C33F340F3497751F1" |wc -l
+echo "J"
+cat $tmpfile | grep "056F9C04CBE0CD1A7" |wc -l
+echo "Nodebreaker"
+cat $tmpfile | grep "5E8673673E374"|wc -l
+
+echo "-----------------------------------------------"
+echo "compass"
+cat $tmpfile | grep "8B2C484FF34411217CA90653"
+echo "bharvest"
+cat $tmpfile | grep "B8552EAC0D123A6BF60"
+echo "Certus One"
+cat $tmpfile | grep "815D8F7A0688622937758EF"
+echo "ATEAM"
+cat $tmpfile | grep "C33F340F3497751F1"
+echo "J"
+cat $tmpfile | grep "056F9C04CBE0CD1A7"
+echo "Nodebreaker"
+cat $tmpfile | grep "5E8673673E374"

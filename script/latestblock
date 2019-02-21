@@ -1,0 +1,3 @@
+#!/bin/sh
+
+curl -s http://localhost:26657/blocks/latest |jq .block_meta.header
